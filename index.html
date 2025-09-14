@@ -10,12 +10,9 @@
       text-align: center;
       overflow: hidden;
 
-      /* Fundo azul escuro estilo universo */
-      background: radial-gradient(circle at top, #0b1d3a, #000014);
-      background-image: radial-gradient(white 1px, transparent 1px),
-                        radial-gradient(white 1px, transparent 1px);
-      background-size: 50px 50px, 80px 80px;
-      background-position: 0 0, 20px 40px;
+      /* Fundo com a imagem plano.jpg */
+      background: url('plano.jpg') no-repeat center center fixed;
+      background-size: cover;
     }
 
     #container {
@@ -96,10 +93,7 @@
       <img id="imagem" src="IMG1.jpg" alt="Amor">
       <div id="frase">Sempre te amei, desde a primeira vez que nossos olhares se cruzaram.</div>
       <div id="contador"></div>
-      <audio id="musica" loop>
-        <source src="musica.mp3" type="audio/mpeg">
-        Seu navegador não suporta áudio.
-      </audio>
+      <audio id="musica" loop></audio>
     </div>
   </div>
 
@@ -162,6 +156,26 @@
 
     btn.addEventListener("click", () => {
       btn.style.display = "none";
+      slide.style.display = "block";
+
+      // Toca primeira música e configura próxima automática
+      tocarProximaMusica();
+      musica.onended = tocarProximaMusica;
+
+      // Slideshow sequencial
+      setInterval(()=>{
+        indice = (indice + 1) % imagens.length;
+        imgTag.src = imagens[indice];
+      },8000); // 8 segundos
+
+      atualizarContador();
+      setInterval(atualizarContador,1000);
+      setInterval(criarCoracao,300);
+    });
+  </script>
+</body>
+</html>
+ btn.style.display = "none";
       slide.style.display = "block";
 
       // Toca primeira música e configura próxima automática
