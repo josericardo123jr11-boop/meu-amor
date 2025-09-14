@@ -11,8 +11,11 @@
       overflow: hidden;
 
       /* Fundo azul escuro estilo universo */
-      background: url('plano.jpg') no-repeat center center fixed;
-      background-size: cover;
+      background: radial-gradient(circle at top, #0b1d3a, #000014);
+      background-image: radial-gradient(white 1px, transparent 1px),
+                        radial-gradient(white 1px, transparent 1px);
+      background-size: 50px 50px, 80px 80px;
+      background-position: 0 0, 20px 40px;
     }
 
     #container {
@@ -50,8 +53,6 @@
       height: auto;
       border-radius: 15px;
       box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-      opacity: 1;
-      transition: opacity 2s ease-in-out; /* transição suave */
     }
 
     #frase {
@@ -76,6 +77,7 @@
       position: fixed;
       top: -20px;
       color: #ff4d6d;
+      font-size: 20px;
       pointer-events: none;
       animation: fall linear forwards;
       z-index: 2;
@@ -91,8 +93,8 @@
     <button id="btn">Clique aqui</button>
 
     <div id="slideshow">
-      <img id="imagem" src="IMG1.jpg" alt="amor" onerror="this.src='IMG1.jpg'; this.alt='amor';">
-      <div id="frase">Te amando desde o primeiro dia que vi seus olhos brilharem ao olhar nos meus</div>
+      <img id="imagem" src="IMG1.jpg" alt="Amor">
+      <div id="frase">Sempre te amei, desde a primeira vez que nossos olhares se cruzaram.</div>
       <div id="contador"></div>
       <audio id="musica" loop>
         <source src="musica.mp3" type="audio/mpeg">
@@ -102,11 +104,10 @@
   </div>
 
   <script>
-    // Lista de imagens (tenta .jpg e .jpeg)
+    // Lista de imagens (apenas .jpg)
     const imagens = [];
     for (let i = 1; i <= 22; i++) {
       imagens.push(`IMG${i}.jpg`);
-      imagens.push(`IMG${i}.jpeg`);
     }
 
     let indice = 0;
@@ -115,6 +116,13 @@
     const btn = document.getElementById("btn");
     const musica = document.getElementById("musica");
     const contador = document.getElementById("contador");
+
+    // Lista de músicas
+    const musicas = [
+      'musica.mp3','musica1.mp3','musica2.mp3','musica3.mp3','musica4.mp3',
+      'musica5.mp3','musica6.mp3','musica7.mp3','musica8.mp3','musica9.mp3','musica10.mp3'
+    ];
+    let musicaIndex = 0;
 
     const dataInicio = new Date("Jan 23, 2024 00:00:00").getTime();
 
@@ -140,28 +148,31 @@
       heart.classList.add("heart");
       heart.innerHTML = "❤️";
       heart.style.left = Math.random()*100 + "vw";
-      heart.style.fontSize = Math.random()*40 + 25 + "px"; // corações maiores
+      heart.style.fontSize = Math.random()*20 + 15 + "px";
       heart.style.animationDuration = (Math.random()*3 + 2) + "s";
       document.body.appendChild(heart);
       setTimeout(()=>{heart.remove();},5000);
     }
 
-    function trocarImagem() {
-      imgTag.style.opacity = 0; // começa fade out
-      setTimeout(()=>{
-        indice = (indice + 1) % imagens.length;
-        imgTag.src = imagens[indice];
-        imgTag.alt = "amor"; // fallback se não carregar
-        imgTag.style.opacity = 1; // fade in
-      }, 1000); // meio segundo para fade out
+    function tocarProximaMusica() {
+      musica.src = musicas[musicaIndex];
+      musica.play();
+      musicaIndex = (musicaIndex + 1) % musicas.length;
     }
 
     btn.addEventListener("click", () => {
       btn.style.display = "none";
       slide.style.display = "block";
-      musica.play();
 
-      setInterval(trocarImagem, 8000); // 8 segundos de transição
+      // Toca primeira música e configura próxima automática
+      tocarProximaMusica();
+      musica.onended = tocarProximaMusica;
+
+      // Slideshow sequencial
+      setInterval(()=>{
+        indice = (indice + 1) % imagens.length;
+        imgTag.src = imagens[indice];
+      },8000); // 8 segundos
 
       atualizarContador();
       setInterval(atualizarContador,1000);
