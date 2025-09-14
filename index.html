@@ -10,7 +10,7 @@
       text-align: center;
       overflow: hidden;
 
-      /* Fundo com a imagem plano.jpg */
+      /* Fundo com imagem plano.jpg */
       background: url('plano.jpg') no-repeat center center fixed;
       background-size: cover;
     }
@@ -21,8 +21,8 @@
       align-items: center;
       justify-content: center;
       height: 100vh;
-      z-index: 2;
       position: relative;
+      z-index: 2;
     }
 
     #btn {
@@ -93,12 +93,12 @@
       <img id="imagem" src="IMG1.jpg" alt="Amor">
       <div id="frase">Sempre te amei, desde a primeira vez que nossos olhares se cruzaram.</div>
       <div id="contador"></div>
-      <audio id="musica" loop></audio>
+      <audio id="musica"></audio>
     </div>
   </div>
 
   <script>
-    // Lista de imagens (apenas .jpg)
+    // Lista de imagens
     const imagens = [];
     for (let i = 1; i <= 22; i++) {
       imagens.push(`IMG${i}.jpg`);
@@ -156,26 +156,6 @@
 
     btn.addEventListener("click", () => {
       btn.style.display = "none";
-      slide.style.display = "block";
-
-      // Toca primeira música e configura próxima automática
-      tocarProximaMusica();
-      musica.onended = tocarProximaMusica;
-
-      // Slideshow sequencial
-      setInterval(()=>{
-        indice = (indice + 1) % imagens.length;
-        imgTag.src = imagens[indice];
-      },8000); // 8 segundos
-
-      atualizarContador();
-      setInterval(atualizarContador,1000);
-      setInterval(criarCoracao,300);
-    });
-  </script>
-</body>
-</html>
- btn.style.display = "none";
       slide.style.display = "block";
 
       // Toca primeira música e configura próxima automática
