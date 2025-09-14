@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <title>Nosso Amor</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      text-align: center;
+      overflow: hidden;
+
+      /* Fundo azul escuro estilo universo */
+      background: url('plano.jpg') no-repeat center center fixed;
+      background-size: cover;
+    }
+
+    #container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      z-index: 2;
+      position: relative;
+    }
+
+    #btn {
+      padding: 15px 30px;
+      font-size: 18px;
+      border: none;
+      border-radius: 10px;
+      background-color: #ff4d6d;
+      color: white;
+      cursor: pointer;
+      transition: 0.3s;
+      z-index: 3;
+      position: relative;
+    }
+    #btn:hover { background-color: #e63b5a; }
+
+    #slideshow {
+      display: none;
+      margin-top: 20px;
+      position: relative;
+      z-index: 3;
+    }
+    #slideshow img {
+      width: 400px;
+      height: auto;
+      border-radius: 15px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      opacity: 1;
+      transition: opacity 2s ease-in-out; /* transição suave */
+    }
+
+    #frase {
+      margin-top: 15px;
+      font-size: 20px;
+      font-weight: bold;
+      color: #fff;
+      max-width: 500px;
+      text-shadow: 1px 1px 5px #000;
+    }
+
+    #contador {
+      margin-top: 10px;
+      font-size: 18px;
+      color: #ddd;
+      text-shadow: 1px 1px 5px #000;
+    }
+
+    audio { display: none; }
+
+    .heart {
+      position: fixed;
+      top: -20px;
+      color: #ff4d6d;
+      pointer-events: none;
+      animation: fall linear forwards;
+      z-index: 2;
+    }
+
+    @keyframes fall {
+      to { transform: translateY(110vh) rotate(360deg); opacity: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <button id="btn">Clique aqui</button>
+
+    <div id="slideshow">
+      <img id="imagem" src="IMG1.jpg" alt="amor" onerror="this.src='IMG1.jpg'; this.alt='amor';">
+      <div id="frase">Te amando desde o primeiro dia que vi seus olhos brilharem ao olhar nos meus</div>
+      <div id="contador"></div>
+      <audio id="musica" loop>
+        <source src="musica.mp3" type="audio/mpeg">
+        Seu navegador não suporta áudio.
+      </audio>
+    </div>
+  </div>
+
+  <script>
+    // Lista de imagens (tenta .jpg e .jpeg)
+    const imagens = [];
+    for (let i = 1; i <= 22; i++) {
+      imagens.push(`IMG${i}.jpg`);
+      imagens.push(`IMG${i}.jpeg`);
+    }
+
+    let indice = 0;
+    const imgTag = document.getElementById("imagem");
+    const slide = document.getElementById("slideshow");
+    const btn = document.getElementById("btn");
+    const musica = document.getElementById("musica");
+    const contador = document.getElementById("contador");
+
+    const dataInicio = new Date("Jan 23, 2024 00:00:00").getTime();
+
+    function atualizarContador() {
+      const agora = new Date().getTime();
+      let diferenca = agora - dataInicio;
+
+      const anos = Math.floor(diferenca / (1000*60*60*24*365));
+      diferenca -= anos*(1000*60*60*24*365);
+      const dias = Math.floor(diferenca / (1000*60*60*24));
+      diferenca -= dias*(1000*60*60*24);
+      const horas = Math.floor(diferenca / (1000*60*60));
+      diferenca -= horas*(1000*60*60);
+      const minutos = Math.floor(diferenca / (1000*60));
+      diferenca -= minutos*(1000*60);
+      const segundos = Math.floor(diferenca / 1000);
+
+      contador.innerHTML = `${anos} anos, ${dias} dias, ${horas}h ${minutos}m ${segundos}s juntos 💖`;
+    }
+
+    function criarCoracao() {
+      const heart = document.createElement("div");
+      heart.classList.add("heart");
+      heart.innerHTML = "❤️";
+      heart.style.left = Math.random()*100 + "vw";
+      heart.style.fontSize = Math.random()*40 + 25 + "px"; // corações maiores
+      heart.style.animationDuration = (Math.random()*3 + 2) + "s";
+      document.body.appendChild(heart);
+      setTimeout(()=>{heart.remove();},5000);
+    }
+
+    function trocarImagem() {
+      imgTag.style.opacity = 0; // começa fade out
+      setTimeout(()=>{
+        indice = (indice + 1) % imagens.length;
+        imgTag.src = imagens[indice];
+        imgTag.alt = "amor"; // fallback se não carregar
+        imgTag.style.opacity = 1; // fade in
+      }, 1000); // meio segundo para fade out
+    }
+
+    btn.addEventListener("click", () => {
+      btn.style.display = "none";
+      slide.style.display = "block";
+      musica.play();
+
+      setInterval(trocarImagem, 8000); // 8 segundos de transição
+
+      atualizarContador();
+      setInterval(atualizarContador,1000);
+      setInterval(criarCoracao,300);
+    });
+  </script>
+</body>
+</html>
